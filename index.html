@@ -2,12 +2,60 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <p>this is a new repo.</p>
-    <p>this is a new feature (dropdown)</p>
-    <p>this is a new feature (button)</p>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Client</title>
 </head>
 <body>
+    <h1>WebSocket Example</h1>
+    <p>Status: <span id="status">Disconnected</span></p>
+    <input type="text" id="message" placeholder="Type a message">
+    <button id="send">Send Message</button>
+    <div id="output"></div>
 
+    <script>
+        // Step 1: Create a WebSocket connection
+        const socket = new WebSocket('ws://localhost:8080');
+
+        // DOM elements
+        const status = document.getElementById('status');
+        const messageInput = document.getElementById('message');
+        const sendButton = document.getElementById('send');
+        const output = document.getElementById('output');
+
+        // Step 2: Open event - Connection established
+        socket.onopen = function () {
+            status.textContent = 'Connected';
+            console.log('Connected to WebSocket server');
+        };
+
+        // Step 3: Message event - Receive messages from the server
+        socket.onmessage = function (event) {
+            console.log(`Message from server: ${event.data}`);
+            const p = document.createElement('p');
+            p.textContent = `Server: ${event.data}`;
+            output.appendChild(p);
+        };
+
+        // Step 4: Error event - Handle errors
+        socket.onerror = function (error) {
+            console.error('WebSocket Error:', error);
+        };
+
+        // Step 5: Close event - Connection closed
+        socket.onclose = function () {
+            status.textContent = 'Disconnected';
+            console.log('Disconnected from WebSocket server');
+        };
+
+        // Step 6: Send message to the server
+        sendButton.addEventListener('click', () => {
+            const message = messageInput.value;
+            if (message) {
+                console.log(`Sending: ${message}`);
+                socket.send(message);
+                messageInput.value = '';
+            }
+        });
+    </script>
 </body>
 </html>

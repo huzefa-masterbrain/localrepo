@@ -1,4 +1,4 @@
-# this is my local repo
-this is my first git respository
+# web socket
+websocket respository
 <br>
 author=masterbrain
